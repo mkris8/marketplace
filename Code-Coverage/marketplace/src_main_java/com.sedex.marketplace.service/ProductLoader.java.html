@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ProductLoader.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">OnlineMarketPlaceTest (19-Nov-2017 19:07:52)</a> &gt; <a href="../../index.html" class="el_group">marketplace</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sedex.marketplace.service</a> &gt; <span class="el_source">ProductLoader.java</span></div><h1>ProductLoader.java</h1><pre class="source lang-java linenums">package com.sedex.marketplace.service;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+<span class="fc" id="L14">public class ProductLoader implements ProductLoaderService {</span>
+
+	public List&lt;JSONObject&gt; load() {
+
+<span class="fc" id="L18">		JSONParser jsonParser = new JSONParser();</span>
+<span class="fc" id="L19">		List&lt;JSONObject&gt; productObjectList = new ArrayList&lt;JSONObject&gt;();</span>
+		try {
+<span class="fc" id="L21">			FileReader reader = new FileReader(&quot;products.json&quot;);</span>
+<span class="fc" id="L22">			Object obj = jsonParser.parse(reader);</span>
+
+<span class="fc" id="L24">			JSONArray productList = (JSONArray) obj;</span>
+
+<span class="fc bfc" id="L26" title="All 2 branches covered.">			for (int i = 0; i &lt; productList.size(); i++) {</span>
+<span class="fc" id="L27">				productObjectList.add((JSONObject) productList.get(i));</span>
+			}
+
+<span class="pc" id="L30">		} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L31">			e.printStackTrace();</span>
+<span class="nc" id="L32">		} catch (IOException e) {</span>
+<span class="nc" id="L33">			e.printStackTrace();</span>
+<span class="nc" id="L34">		} catch (ParseException e) {</span>
+<span class="nc" id="L35">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L37">		return productObjectList;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>OnlineMarketPlaceTest (19-Nov-2017 19:07:52)</div></body></html>

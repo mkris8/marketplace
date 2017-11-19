@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Product.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">OnlineMarketPlaceTest (19-Nov-2017 19:07:52)</a> &gt; <a href="../../index.html" class="el_group">marketplace</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sedex.marketplace.model.json</a> &gt; <span class="el_source">Product.java</span></div><h1>Product.java</h1><pre class="source lang-java linenums">
+package com.sedex.marketplace.model.json;
+
+import javax.annotation.Generated;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+@Generated(&quot;org.jsonschema2pojo&quot;)
+public class Product {
+
+    @SerializedName(&quot;Product code&quot;)
+    @Expose
+    private String ProductCode;
+    @SerializedName(&quot;Name&quot;)
+    @Expose
+    private String Name;
+    @SerializedName(&quot;Price&quot;)
+    @Expose
+    private String Price;
+
+<span class="fc" id="L24">    public Product(String code, String productName, String string) {</span>
+
+<span class="fc" id="L26">    	this.ProductCode = String.valueOf(code);</span>
+<span class="fc" id="L27">    	this.Name = productName;</span>
+<span class="fc" id="L28">    	this.Price = String.valueOf(string);</span>
+<span class="fc" id="L29">    }</span>
+
+	/**
+     * 
+     * @return
+     *     The ProductCode
+     */
+    public String getProductCode() {
+<span class="fc" id="L37">        return ProductCode;</span>
+    }
+
+    /**
+     * 
+     * @param ProductCode
+     *     The Product code
+     */
+    public void setProductCode(String ProductCode) {
+<span class="nc" id="L46">        this.ProductCode = ProductCode;</span>
+<span class="nc" id="L47">    }</span>
+
+    /**
+     * 
+     * @return
+     *     The Name
+     */
+    public String getName() {
+<span class="fc" id="L55">        return Name;</span>
+    }
+
+    /**
+     * 
+     * @param Name
+     *     The Name
+     */
+    public void setName(String Name) {
+<span class="nc" id="L64">        this.Name = Name;</span>
+<span class="nc" id="L65">    }</span>
+
+    /**
+     * 
+     * @return
+     *     The Price
+     */
+    public String getPrice() {
+<span class="fc" id="L73">        return Price;</span>
+    }
+
+    /**
+     * 
+     * @param Price
+     *     The Price
+     */
+    public void setPrice(String Price) {
+<span class="nc" id="L82">        this.Price = Price;</span>
+<span class="nc" id="L83">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L87">        return ToStringBuilder.reflectionToString(this);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L92">        return new HashCodeBuilder().append(ProductCode).append(Name).append(Price).toHashCode();</span>
+    }
+
+    @Override
+    public boolean equals(Object other) {
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (other == this) {</span>
+<span class="nc" id="L98">            return true;</span>
+        }
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        if ((other instanceof Product) == false) {</span>
+<span class="nc" id="L101">            return false;</span>
+        }
+<span class="nc" id="L103">        Product rhs = ((Product) other);</span>
+<span class="nc" id="L104">        return new EqualsBuilder().append(ProductCode, rhs.ProductCode).append(Name, rhs.Name).append(Price, rhs.Price).isEquals();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>OnlineMarketPlaceTest (19-Nov-2017 19:07:52)</div></body></html>

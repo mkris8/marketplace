@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Checkout.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">OnlineMarketPlaceTest (19-Nov-2017 19:07:52)</a> &gt; <a href="../../index.html" class="el_group">marketplace</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sedex.marketplace.service</a> &gt; <span class="el_source">Checkout.java</span></div><h1>Checkout.java</h1><pre class="source lang-java linenums">package com.sedex.marketplace.service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.json.simple.JSONObject;
+
+import com.sedex.marketplace.model.PromotionalRules;
+import com.sedex.marketplace.model.json.Product;
+
+public class Checkout implements CheckoutService {
+	private PromotionalRules promotionalRules;
+<span class="fc" id="L14">	List&lt;Product&gt; items = new ArrayList&lt;Product&gt;();</span>
+<span class="fc" id="L15">	private Double originalPrice = 0.00;</span>
+	private Double salePrice;
+<span class="fc" id="L17">	private final int TEN_DIS_AMT = 60;</span>
+<span class="fc" id="L18">	private final int TRAVAL_DIS_COUNT = 2;</span>
+	
+<span class="fc" id="L20">	private ProductLoaderService loader = new ProductLoader();</span>
+
+<span class="fc" id="L22">	public Checkout(PromotionalRules promotionalRules) {</span>
+<span class="fc" id="L23">		this.promotionalRules = promotionalRules;</span>
+<span class="fc" id="L24">	}</span>
+
+	public List&lt;Product&gt; getItems() {
+<span class="fc" id="L27">		return this.items;</span>
+	}
+
+	public void scan(Product item) {
+<span class="fc" id="L31">		this.items.add(item);</span>
+<span class="fc" id="L32">	}</span>
+
+	public Double getOriginalPrice() {
+<span class="fc bfc" id="L35" title="All 2 branches covered.">		for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="fc" id="L36">			String price = items.get(i).getPrice();</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">			String formattedPrice = (price.contains(&quot;\u00a3&quot;) ? (price.replaceAll(&quot;\\£&quot;, &quot;&quot;)) : price);</span>
+<span class="fc" id="L38">			Double originalPrice = Double.parseDouble(formattedPrice);</span>
+<span class="fc" id="L39">			this.originalPrice += originalPrice;</span>
+		}
+
+<span class="fc" id="L42">		return this.originalPrice;</span>
+	}
+
+	public Double accept(String input) {
+
+<span class="fc" id="L47">		String regexp = &quot;[\\s,:]+&quot;;</span>
+<span class="fc" id="L48">		List&lt;String&gt; inputCodes = Arrays.asList(input.split(regexp));</span>
+<span class="fc" id="L49">		List&lt;Product&gt; itemList = new ArrayList&lt;Product&gt;();</span>
+
+<span class="fc" id="L51">		List&lt;JSONObject&gt; jsonObjectList = loader.load();</span>
+		
+<span class="fc bfc" id="L53" title="All 2 branches covered.">		for (int i = 0; i &lt; inputCodes.size(); i++) {</span>
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">			for (JSONObject jsonObj : jsonObjectList) {</span>
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">				for (Object key : jsonObj.keySet()) {</span>
+
+<span class="fc" id="L59">					String keyStr = (String) key;</span>
+<span class="fc" id="L60">					JSONObject keyvalue = (JSONObject) jsonObj.get(keyStr);</span>
+<span class="fc" id="L61">					String code = (String) keyvalue.get(&quot;Product Code&quot;);</span>
+
+<span class="fc bfc" id="L63" title="All 2 branches covered.">					if (inputCodes.get(i).equals(code)) {</span>
+<span class="fc" id="L64">						String name = (String) keyvalue.get(&quot;Name&quot;);</span>
+<span class="fc" id="L65">						String price = (String) keyvalue.get(&quot;Price&quot;);</span>
+<span class="fc" id="L66">						itemList.add(new Product(code, name, price));</span>
+					}
+				}
+			}
+		}
+			
+				
+<span class="fc bfc" id="L73" title="All 2 branches covered.">		for (Product item : itemList) {</span>
+<span class="fc" id="L74">			scan(item);</span>
+		}
+
+<span class="fc" id="L77">		Double price = total();</span>
+<span class="fc" id="L78">		System.out.println(&quot;Total price expected: £&quot; + price);</span>
+
+<span class="fc" id="L80">		return price;</span>
+
+	}
+
+	public Double total() {
+<span class="fc" id="L85">		salePrice = calculateTravelCardDiscount(getOriginalPrice());</span>
+<span class="fc" id="L86">		salePrice = apply10PercentDiscount(salePrice);</span>
+
+<span class="fc" id="L88">		return salePrice;</span>
+	}
+
+	private Double apply10PercentDiscount(Double originalPrice) {
+<span class="fc bfc" id="L92" title="All 2 branches covered.">		if (originalPrice &gt; TEN_DIS_AMT) {</span>
+<span class="fc" id="L93">			promotionalRules.apply(&quot;10percent&quot;);</span>
+<span class="fc" id="L94">			Double discount = originalPrice * promotionalRules.getDiscount();</span>
+<span class="fc" id="L95">			return originalPrice - discount;</span>
+		} else {
+<span class="fc" id="L97">			return originalPrice;</span>
+		}
+
+	}
+
+	private Double calculateTravelCardDiscount(Double originalPrice) {
+<span class="fc" id="L103">		int travelCardCount = 0;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">		for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">			if (items.get(i).getProductCode().equals(&quot;001&quot;)) {</span>
+<span class="fc" id="L106">				travelCardCount++;</span>
+			}
+		}
+
+<span class="fc bfc" id="L110" title="All 2 branches covered.">		if (travelCardCount &gt;= TRAVAL_DIS_COUNT) {</span>
+<span class="fc" id="L111">			promotionalRules.apply(&quot;travelcard&quot;);</span>
+<span class="fc" id="L112">			salePrice = (originalPrice - (promotionalRules.getDiscountAmount() * travelCardCount));</span>
+
+<span class="fc" id="L114">			return salePrice;</span>
+			
+		} else {
+
+<span class="fc" id="L118">			return originalPrice;</span>
+		}
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>OnlineMarketPlaceTest (19-Nov-2017 19:07:52)</div></body></html>
