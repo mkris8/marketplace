@@ -1,0 +1,23 @@
+[
+	{
+		"Product001": {
+			"Product Code": "001",
+			"Name": "Travel Card Holder",
+			"Price": "£9.25"
+		}
+	},
+	{
+		"Product002": {
+			"Product Code": "002",
+			"Name": "Personalised cufflinks",
+			"Price": "£45.00"
+		}
+	},
+	{
+		"Product003": {
+			"Product Code": "003",
+			"Name": "Kids T-shirt",
+			"Price": "£19.95"
+		}
+	}
+]
