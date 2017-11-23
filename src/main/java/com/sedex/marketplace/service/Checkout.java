@@ -87,18 +87,23 @@ public class Checkout implements CheckoutService {
 	}
 
 	public Double total() {
-		salePrice = calculateTravelCardDiscount(getOriginalPrice());
-		salePrice = apply10PercentDiscount(salePrice);
+					
+			salePrice = calculateTravelCardDiscount(getOriginalPrice());
+			salePrice = apply10PercentDiscount(salePrice);
 
 		return salePrice;
 	}
 
 	private Double apply10PercentDiscount(Double originalPrice) {
 		if (originalPrice > TEN_DIS_AMT) {
-			promotionalRules.apply("10percent");
+
+			// Applying strategy pattern
+			PromotionalRules promotionalRules = applyPromotion(new PercentPromotionStrategy(), "10percent");
+			
 			Double discount = originalPrice * promotionalRules.getDiscount();
 			return originalPrice - discount;
 		} else {
+			
 			return originalPrice;
 		}
 
@@ -113,7 +118,8 @@ public class Checkout implements CheckoutService {
 		}
 
 		if (travelCardCount >= TRAVAL_DIS_COUNT) {
-			promotionalRules.apply("travelcard");
+			// Applying strategy pattern
+			PromotionalRules promotionalRules =  applyPromotion(new TravelCardPromotionStrategy(), "travelcard");
 			salePrice = (originalPrice - (promotionalRules.getDiscountAmount() * travelCardCount));
 
 			return salePrice;
@@ -125,4 +131,9 @@ public class Checkout implements CheckoutService {
 
 	}
 
+	public PromotionalRules applyPromotion(PromotionalRulesStrategy promotionalRulesStrategy, String ruleDefinition) {
+		
+		return promotionalRulesStrategy.applyPromotionalRule(ruleDefinition);
+	}
+	
 }

@@ -30,25 +30,4 @@ public class PromotionalRules {
 		this.discountAmount = discountAmount;
 	}
 
-	public void apply(String ruleDefinition) {
-		this.ruleDefinition = ruleDefinition;
-
-		if (validateRuleDefinition(ruleDefinition)) {
-			// spend over £60, then you get 10% off your purchase.
-			if (ruleDefinition.equals("10percent")) {
-				this.discountRate = 0.10;
-			}
-
-			// buy 2 or more travel card holders then the price drops to £8.50
-			if (ruleDefinition.equals("travelcard")) {
-				this.discountAmount = 0.75;
-			}
-		}
-
-	}
-
-	private boolean validateRuleDefinition(String ruleDefinition) {
-		return ruleDefinition != null && !ruleDefinition.isEmpty();
-	}
-
 }

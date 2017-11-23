@@ -6,13 +6,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.sedex.marketplace.model.PromotionalRules;
 import com.sedex.marketplace.model.json.Product;
 import com.sedex.marketplace.service.Checkout;
 import com.sedex.marketplace.service.CheckoutService;
+import com.sedex.marketplace.service.PercentPromotionStrategy;
+import com.sedex.marketplace.service.TravelCardPromotionStrategy;
 
 public class OnlineMarketPlaceTest {
 
@@ -101,8 +102,10 @@ public class OnlineMarketPlaceTest {
 	@Test
 	public void apply10PercentPromotionOver60_1() {
 		promotionalRules = new PromotionalRules();
-		promotionalRules.apply("10percent");
+		//promotionalRules.apply("10percent");
+		promotionalRules.setRuleDefinition("10percent");
 		co = new Checkout(promotionalRules);
+		
 		co.scan(item2);
 		co.scan(item3);
 		assertThat(co.total(), is(58.455));
@@ -112,7 +115,9 @@ public class OnlineMarketPlaceTest {
 	@Test
 	public void apply10PercentPromotionOver60_2() {
 		promotionalRules = new PromotionalRules();
-		promotionalRules.apply("10percent");
+//		promotionalRules.apply("10percent");
+		co = new Checkout(promotionalRules);
+		co.applyPromotion(new PercentPromotionStrategy(), "10percent");
 		co = new Checkout(promotionalRules);
 		co.scan(item1);
 		co.scan(item2);
@@ -122,12 +127,16 @@ public class OnlineMarketPlaceTest {
 	
 	@Test
 	public void apply10PercentPromotionBelow60() {
-		promotionalRules.apply("10percent");
+//		promotionalRules.apply("10percent");
+		co = new Checkout(promotionalRules);
+		co.applyPromotion(new PercentPromotionStrategy(), "10percent");
 		co = new Checkout(promotionalRules);
 		co.scan(item2);
 		assertThat(co.total(), is(45.0));
 		
-		promotionalRules.apply("10percent");
+//		promotionalRules.apply("10percent");
+		co = new Checkout(promotionalRules);
+		co.applyPromotion(new PercentPromotionStrategy(), "10percent");
 		co = new Checkout(promotionalRules);
 		co.scan(item1);
 		assertThat(co.total(), is(9.25));
@@ -135,7 +144,9 @@ public class OnlineMarketPlaceTest {
 	
 	@Test
 	public void applyTravelCardPromotionForExactlyTwo() {
-		promotionalRules.apply("travelcard");
+//		promotionalRules.apply("travelcard");
+		co = new Checkout(promotionalRules);
+		co.applyPromotion(new TravelCardPromotionStrategy(), "travelcard");
 		co = new Checkout(promotionalRules);
 		co.scan(item1);
 		co.scan(item1);
@@ -144,7 +155,9 @@ public class OnlineMarketPlaceTest {
 	
 	@Test
 	public void applyTravelCardPromotionForTwoOrMore() {
-		promotionalRules.apply("travelcard");
+//		promotionalRules.apply("travelcard");
+		co = new Checkout(promotionalRules);
+		co.applyPromotion(new TravelCardPromotionStrategy(), "travelcard");
 		co = new Checkout(promotionalRules);
 		co.scan(item1);
 		co.scan(item1);
@@ -157,7 +170,9 @@ public class OnlineMarketPlaceTest {
 	
 	@Test
 	public void applyTravelCardPromotionForOne() {
-		promotionalRules.apply("travelcard");
+//		promotionalRules.apply("travelcard");
+		co = new Checkout(promotionalRules);
+		co.applyPromotion(new TravelCardPromotionStrategy(), "travelcard");
 		co = new Checkout(promotionalRules);
 		co.scan(item1);
 		assertThat(co.total(), is(9.25));
@@ -165,7 +180,9 @@ public class OnlineMarketPlaceTest {
 	
 	@Test
 	public void applyTravelCardPromotionForZero() {
-		promotionalRules.apply("travelcard");
+//		promotionalRules.apply("travelcard");
+		co = new Checkout(promotionalRules);
+		co.applyPromotion(new TravelCardPromotionStrategy(), "travelcard");
 		co = new Checkout(promotionalRules);
 		co.scan(item2);
 		assertThat(co.total(), is(45.00));
@@ -173,7 +190,9 @@ public class OnlineMarketPlaceTest {
 	
 	@Test
 	public void applyEmptyPromotion() {
-		promotionalRules.apply("");
+//		promotionalRules.apply("");
+		co = new Checkout(promotionalRules);
+		co.applyPromotion(new PercentPromotionStrategy(), "");
 		co = new Checkout(promotionalRules);
 		co.scan(item2);
 		assertThat(co.total(), is(45.00));
